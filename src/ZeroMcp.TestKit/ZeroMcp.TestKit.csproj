@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>ZeroMcp.TestKit</RootNamespace>
+    <Description>Universal testing toolkit for MCP servers — .NET fluent DSL</Description>
+    <Authors>ZeroMcp</Authors>
+    <PackageId>ZeroMcp.TestKit</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+</Project>

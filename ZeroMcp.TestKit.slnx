@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ZeroMcp.TestKit/ZeroMcp.TestKit.csproj" />
+    <Project Path="src/ZeroMcp.TestKit.Xunit/ZeroMcp.TestKit.Xunit.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ZeroMcp.TestKit.Tests/ZeroMcp.TestKit.Tests.csproj" />
+  </Folder>
+</Solution>

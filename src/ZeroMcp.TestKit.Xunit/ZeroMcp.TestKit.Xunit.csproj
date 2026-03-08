@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>ZeroMcp.TestKit.Xunit</RootNamespace>
+    <Description>xUnit integration for ZeroMcp.TestKit — [McpFact] and [McpTheory] attributes</Description>
+    <Authors>ZeroMcp</Authors>
+    <PackageId>ZeroMcp.TestKit.Xunit</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
+    <Version>0.1.0</Version>
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZeroMcp.TestKit\ZeroMcp.TestKit.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.core" Version="2.*" />
+    <PackageReference Include="xunit.assert" Version="2.*" />
+  </ItemGroup>
+
+</Project>
