@@ -1,7 +1,10 @@
 <Solution>
+  <Folder Name="/sample/">
+    <Project Path="ZeroMcp.TestKit.Sample/ZeroMcp.TestKit.Sample.csproj" Id="f5445f14-932d-4eea-be4e-4a2796061446" />
+  </Folder>
   <Folder Name="/src/">
-    <Project Path="src/ZeroMcp.TestKit/ZeroMcp.TestKit.csproj" />
     <Project Path="src/ZeroMcp.TestKit.Xunit/ZeroMcp.TestKit.Xunit.csproj" />
+    <Project Path="src/ZeroMcp.TestKit/ZeroMcp.TestKit.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ZeroMcp.TestKit.Tests/ZeroMcp.TestKit.Tests.csproj" />

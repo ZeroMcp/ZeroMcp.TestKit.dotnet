@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Xunit;
 using ZeroMcp.TestKit.Models;
 
@@ -58,5 +59,43 @@ public static class McpAssert
         var toolResult = result.Results.Find(r => r.Tool == toolName);
         Assert.NotNull(toolResult);
         Assert.True(toolResult!.Deterministic, $"Tool '{toolName}' is not deterministic");
+    }
+
+    /// <summary>
+    /// Assert that at least one tool response contains the specified property.
+    /// </summary>
+    public static void HasProperty(McpTestRunResult result, string property)
+    {
+        Assert.NotEmpty(result.Results);
+
+        foreach (var toolResult in result.Results)
+        {
+            if (toolResult.Response is { } response
+                && response.ValueKind == JsonValueKind.Object
+                && response.TryGetProperty(property, out _))
+            {
+                return;
+            }
+        }
+
+        var toolNames = string.Join(", ", result.Results.Select(r => r.Tool));
+        Assert.Fail(
+            $"No tool response contains property '{property}'. " +
+            $"Tools checked: [{toolNames}]");
+    }
+
+    /// <summary>
+    /// Assert that a specific tool's response contains the specified property.
+    /// </summary>
+    public static void HasProperty(McpTestRunResult result, string toolName, string property)
+    {
+        var toolResult = result.Results.Find(r => r.Tool == toolName);
+        Assert.NotNull(toolResult);
+
+        Assert.True(
+            toolResult!.Response is { } response
+            && response.ValueKind == JsonValueKind.Object
+            && response.TryGetProperty(property, out _),
+            $"Tool '{toolName}' response does not contain property '{property}'");
     }
 }

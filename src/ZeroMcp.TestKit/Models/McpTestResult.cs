@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ZeroMcp.TestKit.Models;
@@ -41,6 +42,10 @@ public sealed class McpToolTestResult
     [JsonPropertyName("stream_chunks")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? StreamChunks { get; set; }
+
+    [JsonPropertyName("response")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public JsonElement? Response { get; set; }
 
     [JsonPropertyName("errors")]
     public List<McpValidationError> Errors { get; set; } = [];
