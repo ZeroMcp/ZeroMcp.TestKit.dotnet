@@ -108,4 +108,61 @@ public class McpTestResultTests
         Assert.False(new McpTestRunResult { Status = "failed" }.Passed);
         Assert.False(new McpTestRunResult { Status = "error" }.Passed);
     }
+
+    [Fact]
+    public void Deserialize_WithResponse()
+    {
+        var json = """
+        {
+            "status": "passed",
+            "results": [
+                {
+                    "tool": "echo",
+                    "passed": true,
+                    "errors": [],
+                    "response": {
+                        "content": [{ "type": "text", "text": "hello world" }],
+                        "isError": false
+                    },
+                    "elapsed_ms": 10
+                }
+            ],
+            "elapsed_ms": 20
+        }
+        """;
+
+        var result = JsonSerializer.Deserialize<McpTestRunResult>(json, Options);
+
+        Assert.NotNull(result);
+        Assert.True(result.Results[0].Response.HasValue);
+        var response = result.Results[0].Response!.Value;
+        var content = response.GetProperty("content");
+        Assert.Equal(JsonValueKind.Array, content.ValueKind);
+        var text = content[0].GetProperty("text").GetString();
+        Assert.Equal("hello world", text);
+    }
+
+    [Fact]
+    public void Deserialize_WithoutResponse_IsNull()
+    {
+        var json = """
+        {
+            "status": "passed",
+            "results": [
+                {
+                    "tool": "__protocol_handshake__",
+                    "passed": true,
+                    "errors": [],
+                    "elapsed_ms": 0
+                }
+            ],
+            "elapsed_ms": 5
+        }
+        """;
+
+        var result = JsonSerializer.Deserialize<McpTestRunResult>(json, Options);
+
+        Assert.NotNull(result);
+        Assert.False(result.Results[0].Response.HasValue);
+    }
 }

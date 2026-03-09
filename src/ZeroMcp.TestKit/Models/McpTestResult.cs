@@ -43,12 +43,16 @@ public sealed class McpToolTestResult
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? StreamChunks { get; set; }
 
+    [JsonPropertyName("errors")]
+    public List<McpValidationError> Errors { get; set; } = [];
+
+    /// <summary>
+    /// Raw JSON response from the MCP server (if available).
+    /// Use this to inspect specific response properties/values.
+    /// </summary>
     [JsonPropertyName("response")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public JsonElement? Response { get; set; }
-
-    [JsonPropertyName("errors")]
-    public List<McpValidationError> Errors { get; set; } = [];
 
     [JsonPropertyName("elapsed_ms")]
     public long ElapsedMs { get; set; }

@@ -114,6 +114,44 @@ McpAssert.SchemaValid(result, "search");
 McpAssert.Deterministic(result, "search");
 ```
 
+### Response Value Assertions
+
+The engine now includes the raw MCP server response in each tool result. Use these helpers
+to assert on specific response properties and values:
+
+```csharp
+var result = await McpTest
+    .Server("http://localhost:8000/mcp")
+    .Tool("search").WithParams(new { query = "hi" })
+    .RunWithoutThrowAsync();
+
+// Assert a specific property path has an expected value
+McpAssert.ResponseContains(result, "search", "content[0].text", "hello world");
+
+// Assert a property exists at a given path
+McpAssert.ResponseHasProperty(result, "search", "content[0].type");
+
+// Get the raw JsonElement for custom assertions
+var response = McpAssert.GetResponse(result, "search");
+Assert.Equal("text", response.GetProperty("content")[0].GetProperty("type").GetString());
+```
+
+### Fluent Assertion Chains
+
+```csharp
+var result = await McpTest
+    .Server("http://localhost:8000/mcp")
+    .Tool("search").WithParams(new { query = "hi" })
+    .RunWithoutThrowAsync();
+
+result
+    .Passed()
+    .HasToolName("search")
+    .HasValidSchema("search")
+    .HasReturnProperty("content")
+    .HasReturnValue("search", "content[0].type", "text");
+```
+
 ## Project Structure
 
 ```
@@ -131,16 +169,18 @@ dotnet/
 │   │   ├── EngineResolver.cs
 │   │   └── McpTestException.cs
 │   └── ZeroMcp.TestKit.Xunit/     # xUnit integration
+│       ├── McpFluentAssertions.cs
 │       ├── McpFactAttribute.cs
 │       ├── McpTheoryAttribute.cs
 │       └── McpAssert.cs
 └── tests/
-    └── ZeroMcp.TestKit.Tests/     # Unit tests (24 passing)
+    └── ZeroMcp.TestKit.Tests/     # Unit tests (33 passing)
         ├── Models/
         │   ├── McpTestDefinitionTests.cs
         │   └── McpTestResultTests.cs
         ├── FluentApiTests.cs
         ├── McpTestExceptionTests.cs
+        ├── McpAssertResponseTests.cs
         └── EngineResolverTests.cs
 ```
 
