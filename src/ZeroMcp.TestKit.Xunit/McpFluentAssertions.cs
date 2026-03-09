@@ -8,21 +8,27 @@ namespace ZeroMcp.TestKit.Xunit;
 /// </summary>
 public static class McpFluentAssertions
 {
-    public static McpTestRunResult HasToolName(this McpTestRunResult test, string toolName)
+    public static McpToolTestResult ForTool(this McpTestRunResult test, string toolName)
     {
-        McpAssert.ToolPassed(test, toolName);
+        var toolResult = test.Results.FirstOrDefault(r => r.Tool == toolName);
+        Assert.NotNull(toolResult);
+        return toolResult!;
+    }
+    public static McpToolTestResult HasToolName(this McpToolTestResult test, string toolName)
+    {
+        Assert.Equal(test.Tool, toolName);
         return test;
     }
 
-    public static McpTestRunResult HasValidSchema(this McpTestRunResult test, string toolName)
+    public static McpToolTestResult HasValidSchema(this McpToolTestResult test)
     {
-        McpAssert.SchemaValid(test, toolName);
+        Assert.True(test.SchemaValid);
         return test;
     }
 
-    public static McpTestRunResult IsDeterministic(this McpTestRunResult test, string toolName)
+    public static McpToolTestResult IsDeterministic(this McpToolTestResult test)
     {
-        McpAssert.Deterministic(test, toolName);
+        Assert.True(test.Deterministic);
         return test;
     }
 
@@ -30,42 +36,46 @@ public static class McpFluentAssertions
     /// Assert that the first tool result's response contains the given property path.
     /// For multi-tool results, use <see cref="HasReturnProperty(McpTestRunResult, string, string)"/>.
     /// </summary>
-    public static McpTestRunResult HasReturnProperty(this McpTestRunResult test, string property)
+    public static McpToolTestResult HasReturnProperty(this McpToolTestResult test, string property)
     {
-        var firstTool = test.Results.FirstOrDefault();
-        Assert.NotNull(firstTool);
-        McpAssert.ResponseHasProperty(test, firstTool!.Tool, property);
-        return test;
-    }
+        Assert.True(test!.Response.HasValue, $"Tool '{test.Tool}' has no response");
 
-    /// <summary>
-    /// Assert that the specified tool's response contains the given property path.
-    /// </summary>
-    public static McpTestRunResult HasReturnProperty(this McpTestRunResult test, string toolName, string property)
-    {
-        McpAssert.ResponseHasProperty(test, toolName, property);
+        var payload = McpAssert.ExtractPayload(test.Response!.Value);
+        try
+        {
+            McpAssert.NavigatePath(payload, property);
+        }
+        catch (Exception ex)
+        {
+            Assert.Fail($"Tool '{test.Tool}' response does not contain path '{property}': {ex.Message}");
+        }
         return test;
     }
 
     /// <summary>
     /// Assert that the specified tool's response contains the given property with the expected value.
     /// </summary>
-    public static McpTestRunResult HasReturnValue(this McpTestRunResult test, string toolName, string propertyPath, string expectedValue)
+    public static McpToolTestResult HasReturnValue(this McpToolTestResult toolResult, string propertyPath, string expectedValue)
     {
-        McpAssert.ResponseContains(test, toolName, propertyPath, expectedValue);
+        Assert.NotNull(toolResult);
+        Assert.True(toolResult!.Response.HasValue, $"Tool '{toolResult.Tool}' has no response");
+
+        var payload = McpAssert.ExtractPayload(toolResult.Response!.Value);
+        var element = McpAssert.NavigatePath(payload, propertyPath);
+        var actual = element.ToString();
+        Assert.Equal(expectedValue, actual);
+        return toolResult;
+    }
+
+    public static McpToolTestResult Passed(this McpToolTestResult test)
+    {
+        Assert.True(test.Passed);
         return test;
     }
 
-    public static McpTestRunResult Passed(this McpTestRunResult test)
+    public static McpToolTestResult Failed(this McpToolTestResult test)
     {
-        McpAssert.Passed(test);
-        return test;
-    }
-
-    public static McpTestRunResult Failed(this McpTestRunResult test)
-    {
-        if (test.Passed)
-            Assert.Fail("Expected test to fail, but it passed.");
+        Assert.False(test.Passed);
         return test;
     }
 }

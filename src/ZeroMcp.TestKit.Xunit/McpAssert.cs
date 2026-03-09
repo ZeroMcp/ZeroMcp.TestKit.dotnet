@@ -71,7 +71,8 @@ public static class McpAssert
         Assert.NotNull(toolResult);
         Assert.True(toolResult!.Response.HasValue, $"Tool '{toolName}' has no response");
 
-        var element = NavigatePath(toolResult.Response!.Value, propertyPath);
+        var payload = ExtractPayload(toolResult.Response!.Value);
+        var element = NavigatePath(payload, propertyPath);
         var actual = element.ToString();
         Assert.Equal(expectedValue, actual);
     }
@@ -85,9 +86,10 @@ public static class McpAssert
         Assert.NotNull(toolResult);
         Assert.True(toolResult!.Response.HasValue, $"Tool '{toolName}' has no response");
 
+        var payload = ExtractPayload(toolResult.Response!.Value);
         try
         {
-            NavigatePath(toolResult.Response!.Value, propertyPath);
+            NavigatePath(payload, propertyPath);
         }
         catch (Exception ex)
         {
@@ -106,7 +108,41 @@ public static class McpAssert
         return toolResult.Response!.Value;
     }
 
-    private static JsonElement NavigatePath(JsonElement root, string path)
+    /// <summary>
+    /// Extract the tool's business payload from an MCP response envelope.
+    /// Unwraps <c>content[0].text</c> and parses it as JSON when possible.
+    /// Falls back to the raw response if the envelope structure isn't recognised.
+    /// </summary>
+    public static JsonElement ExtractPayload(JsonElement response)
+    {
+        if (response.ValueKind == JsonValueKind.Object
+            && response.TryGetProperty("content", out var content)
+            && content.ValueKind == JsonValueKind.Array
+            && content.GetArrayLength() > 0)
+        {
+            var first = content[0];
+            if (first.TryGetProperty("text", out var text)
+                && text.ValueKind == JsonValueKind.String)
+            {
+                var raw = text.GetString();
+                if (raw is not null)
+                {
+                    try
+                    {
+                        return JsonDocument.Parse(raw).RootElement;
+                    }
+                    catch (JsonException)
+                    {
+                        return text;
+                    }
+                }
+            }
+        }
+
+        return response;
+    }
+
+    public static JsonElement NavigatePath(JsonElement root, string path)
     {
         var current = root;
         var segments = path.Split('.');

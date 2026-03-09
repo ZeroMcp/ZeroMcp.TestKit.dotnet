@@ -28,6 +28,11 @@ public static class EngineResolver
         // 2. NuGet native assets (runtimes/{rid}/native/)
         var rid = RuntimeInformation.RuntimeIdentifier;
         var baseDir = AppContext.BaseDirectory;
+            var basePath = Path.Combine(baseDir,  BinaryName);
+
+            if (File.Exists(basePath))
+                return Path.GetFullPath(basePath);
+
         var nativePath = Path.Combine(baseDir, "runtimes", rid, "native", BinaryName);
         if (File.Exists(nativePath))
             return Path.GetFullPath(nativePath);
@@ -46,6 +51,7 @@ public static class EngineResolver
 
         if (fallbackRid != rid)
         {
+
             var fallbackPath = Path.Combine(baseDir, "runtimes", fallbackRid, "native", BinaryName);
             if (File.Exists(fallbackPath))
                 return Path.GetFullPath(fallbackPath);
