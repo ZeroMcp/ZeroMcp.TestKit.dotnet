@@ -13,6 +13,8 @@
     <Version>0.1.0</Version>
     <IsTestProject>false</IsTestProject>
     <PackageReadmeFile>../../README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/ZeroMcp/ZeroMcp.TeskKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
