@@ -48,13 +48,10 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Download TeskKitEngine release artifacts
-        uses: dawidd6/action-download-release-asset@v3
-        with:
-          repo: ZeroMcp/ZeroMcp.TeskKitEngine
-          tag: ${{ github.event.release.tag_name }}
-          file: "*.zip"
-          skip_if_no_asset: false
+      - name: Download TestKitEngine release artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release download "${{ github.event.release.tag_name }}" --repo ZeroMcp/ZeroMcp.TestKitEngine --pattern "*.zip"
 
       - name: Unpack engine binaries
         run: |

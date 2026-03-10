@@ -65,3 +65,8 @@
 
 - **Updated `McpAssertResponseTests`** — 4 tests were navigating the raw MCP envelope (`content[0].text`, `isError`) but `ResponseContains`/`ResponseHasProperty` now call `ExtractPayload` first. Updated test data to put JSON payloads inside `content[0].text` and assert on business properties.
 - **Final result: 33/33 unit tests passing.**
+
+### Fixed publish workflow (`main.yml`)
+
+- Replaced dead `dawidd6/action-download-release-asset@v3` action with `gh release download` (built-in CLI, no third-party dependency).
+- Fixed repo name typo: `ZeroMcp.TeskKitEngine` → `ZeroMcp.TestKitEngine`.
