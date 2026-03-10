@@ -12,6 +12,9 @@
     <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
     <Version>0.1.0</Version>
     <PackageReadmeFile>../../README.md</PackageReadmeFile>
+    <PackageTags>mcp;model-context-protocol;aspnetcore;openapi;brownfield;api;llm;http</PackageTags>
+    <PackageProjectUrl>https://github.com/ZeroMcp/ZeroMcp.TeskKitEngine</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
