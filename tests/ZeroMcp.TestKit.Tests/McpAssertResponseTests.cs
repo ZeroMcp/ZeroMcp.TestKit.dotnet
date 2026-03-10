@@ -35,30 +35,30 @@ public class McpAssertResponseTests
     [Fact]
     public void ResponseContains_MatchesSimpleProperty()
     {
-        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "hello"}], "isError": false}""");
-        McpAssert.ResponseContains(result, "search", "isError", "False");
+        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "{\"id\":1,\"name\":\"Alice\"}"}], "isError": false}""");
+        McpAssert.ResponseContains(result, "search", "name", "Alice");
     }
 
     [Fact]
     public void ResponseContains_MatchesNestedArrayProperty()
     {
-        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "hello world"}]}""");
-        McpAssert.ResponseContains(result, "search", "content[0].text", "hello world");
+        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "{\"items\":[{\"value\":\"hello world\"}]}"}]}""");
+        McpAssert.ResponseContains(result, "search", "items[0].value", "hello world");
     }
 
     [Fact]
     public void ResponseContains_MatchesContentType()
     {
-        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "hi"}]}""");
-        McpAssert.ResponseContains(result, "search", "content[0].type", "text");
+        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "{\"type\":\"widget\",\"count\":5}"}]}""");
+        McpAssert.ResponseContains(result, "search", "type", "widget");
     }
 
     [Fact]
     public void ResponseHasProperty_Succeeds()
     {
-        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "hi"}]}""");
-        McpAssert.ResponseHasProperty(result, "search", "content");
-        McpAssert.ResponseHasProperty(result, "search", "content[0].type");
+        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "{\"id\":1,\"name\":\"Alice\"}"}]}""");
+        McpAssert.ResponseHasProperty(result, "search", "id");
+        McpAssert.ResponseHasProperty(result, "search", "name");
     }
 
     [Fact]
@@ -73,15 +73,15 @@ public class McpAssertResponseTests
     [Fact]
     public void ResponseContains_FailsOnMismatch()
     {
-        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "hello"}]}""");
+        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "{\"name\":\"Alice\"}"}]}""");
         Assert.ThrowsAny<Exception>(() =>
-            McpAssert.ResponseContains(result, "search", "content[0].text", "wrong value"));
+            McpAssert.ResponseContains(result, "search", "name", "wrong value"));
     }
 
     [Fact]
     public void ResponseHasProperty_FailsOnMissing()
     {
-        var result = MakeResultWithResponse("""{"content": []}""");
+        var result = MakeResultWithResponse("""{"content": [{"type": "text", "text": "{\"id\":1}"}]}""");
         Assert.ThrowsAny<Exception>(() =>
             McpAssert.ResponseHasProperty(result, "search", "nonexistent"));
     }

@@ -1,4 +1,5 @@
 <Solution>
+  <Folder Name="/Pipelines/" />
   <Folder Name="/sample/">
     <Project Path="ZeroMcp.TestKit.Sample/ZeroMcp.TestKit.Sample.csproj" Id="f5445f14-932d-4eea-be4e-4a2796061446" />
   </Folder>

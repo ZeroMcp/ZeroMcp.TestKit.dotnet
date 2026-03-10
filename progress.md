@@ -59,4 +59,9 @@
   - Engine doesn't support `validate_protocol` / `validate_metadata` config fields → removed that test.
   - Engine doesn't support `auto_error_tests` config → removed that test.
 - Fixed `get_secure_order` test: `.ExpectError()` checks for JSON-RPC level errors, but the server returns a tool-level `isError: true` inside a successful JSON-RPC `result`. Used `.Failed()` instead to assert the engine marks it as not passed.
-- **Final result: 32/32 tests passing.**
+- **Final result: 32/32 sample tests passing.**
+
+### Fixed unit tests broken by `ExtractPayload` change
+
+- **Updated `McpAssertResponseTests`** — 4 tests were navigating the raw MCP envelope (`content[0].text`, `isError`) but `ResponseContains`/`ResponseHasProperty` now call `ExtractPayload` first. Updated test data to put JSON payloads inside `content[0].text` and assert on business properties.
+- **Final result: 33/33 unit tests passing.**
