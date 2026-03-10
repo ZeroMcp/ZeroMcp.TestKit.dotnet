@@ -48,15 +48,15 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Download TestKitEngine release artifacts
+      - name: Download latest TestKitEngine release (mcptest-all.zip)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release download "${{ github.event.release.tag_name }}" --repo ZeroMcp/ZeroMcp.TeskKitEngine --pattern "*.zip"
+        run: gh release download --repo ZeroMcp/ZeroMcp.TestKitEngine --pattern "mcptest-all.zip"
 
       - name: Unpack engine binaries
         run: |
           mkdir engine
-          unzip *.zip -d engine
+          unzip mcptest-all.zip -d engine
 
       - name: Inject binaries into package layout
         run: |
