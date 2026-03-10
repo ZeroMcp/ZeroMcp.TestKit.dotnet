@@ -48,6 +48,11 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       
+      - name: Restore-xunit
+        run: dotnet restore src/ZeroMcp.TestKit.Xunit/ZeroMcp.TestKit.Xunit.csproj
+
+      - name: Build
+        run: dotnet build src/ZeroMcp.TestKit.Xunit/ZeroMcp.TestKit.Xunit.csproj --configuration Release --no-restore 
       - name: Pack with release version
         run: >
           dotnet pack src/ZeroMcp.TestKit.Xunit/ZeroMcp.TestKit.Xunit.csproj
