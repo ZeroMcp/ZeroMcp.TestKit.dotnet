@@ -1,0 +1,87 @@
+name: ZeroMcp.TestKit.dotnet Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [published]
+
+jobs:
+
+  ci:
+    if: github.event_name != 'release'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build --no-restore
+
+
+  publish:
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Extract version from release tag
+        id: version
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download TeskKitEngine release artifacts
+        uses: dawidd6/action-download-release-asset@v3
+        with:
+          repo: ZeroMcp/ZeroMcp.TeskKitEngine
+          tag: ${{ github.event.release.tag_name }}
+          file: "*.zip"
+          skip_if_no_asset: false
+
+      - name: Unpack engine binaries
+        run: |
+          mkdir engine
+          unzip *.zip -d engine
+
+      - name: Inject binaries into package layout
+        run: |
+          # Copy into the NuGet runtime layout
+          # Adjust if your engine produces platform-specific folders
+          cp -R engine/runtimes src/ZeroMcp.TestKit/
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack with release version
+        run: dotnet pack src/ZeroMcp.TestKit/ZeroMcp.TestKit.csproj \
+              --configuration Release \
+              /p:PackageVersion=${{ steps.version.outputs.version }} \
+              --no-build \
+              --output ./artifacts
+
+      - name: Push to NuGet
+        run: dotnet nuget push "./artifacts/*.nupkg" \
+              --api-key ${{ secrets.NUGET_API_KEY }} \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
