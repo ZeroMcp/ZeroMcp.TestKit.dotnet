@@ -47,6 +47,14 @@ jobs:
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Pack with release version
+        run: >
+          dotnet pack src/ZeroMcp.TestKit.Xunit/ZeroMcp.TestKit.Xunit.csproj
+          --configuration Release
+          /p:PackageVersion=${{ steps.version.outputs.version }}
+          --no-build
+          --output ./artifacts
 
       - name: Download latest TestKitEngine release assets
         env:
