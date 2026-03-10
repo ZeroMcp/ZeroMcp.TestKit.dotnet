@@ -51,7 +51,7 @@ jobs:
       - name: Download latest TestKitEngine release (mcptest-all.zip)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release download --repo ZeroMcp/ZeroMcp.TestKitEngine --pattern "mcptest-all.zip"
+        run: gh release download --repo ZeroMcp/ZeroMcp.TeskKitEngine --pattern "mcptest-all.zip"
 
       - name: Unpack engine binaries
         run: |
