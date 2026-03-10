@@ -13,4 +13,8 @@
     <Version>0.1.0</Version>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <Content Include="runtimes/**/*" PackagePath="runtimes" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
