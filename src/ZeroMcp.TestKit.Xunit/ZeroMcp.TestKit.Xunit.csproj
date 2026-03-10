@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
     <Version>0.1.0</Version>
     <IsTestProject>false</IsTestProject>
+    <PackageReadmeFile>../../README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
