@@ -48,21 +48,43 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Download latest TestKitEngine release (mcptest-all.zip)
+      - name: Download latest TestKitEngine release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release download --repo ZeroMcp/ZeroMcp.TeskKitEngine --pattern "mcptest-all.zip"
+        run: gh release download --repo ZeroMcp/ZeroMcp.TeskKitEngine --pattern "mcptest-*"
 
-      - name: Unpack engine binaries
+      - name: Unpack engine binaries into NuGet runtimes layout
         run: |
-          mkdir engine
-          unzip mcptest-all.zip -d engine
+          declare -A RID_MAP=(
+            ["x86_64-pc-windows-msvc"]="win-x64"
+            ["aarch64-pc-windows-msvc"]="win-arm64"
+            ["x86_64-unknown-linux-gnu"]="linux-x64"
+            ["aarch64-unknown-linux-gnu"]="linux-arm64"
+            ["x86_64-apple-darwin"]="osx-x64"
+            ["aarch64-apple-darwin"]="osx-arm64"
+          )
 
-      - name: Inject binaries into package layout
-        run: |
-          # Copy into the NuGet runtime layout
-          # Adjust if your engine produces platform-specific folders
-          cp -R engine/runtimes src/ZeroMcp.TestKit/
+          RUNTIMES="src/ZeroMcp.TestKit/runtimes"
+
+          for triple in "${!RID_MAP[@]}"; do
+            rid="${RID_MAP[$triple]}"
+            dest="$RUNTIMES/$rid/native"
+            mkdir -p "$dest"
+
+            zip=$(ls mcptest-*-${triple}.zip 2>/dev/null || true)
+            tgz=$(ls mcptest-*-${triple}.tar.gz 2>/dev/null || true)
+
+            if [ -n "$zip" ]; then
+              unzip -o "$zip" -d "$dest"
+            elif [ -n "$tgz" ]; then
+              tar xzf "$tgz" -C "$dest"
+            else
+              echo "WARNING: No asset found for $triple ($rid)"
+            fi
+          done
+
+          echo "=== Runtimes layout ==="
+          find "$RUNTIMES" -type f
 
       - name: Restore
         run: dotnet restore
