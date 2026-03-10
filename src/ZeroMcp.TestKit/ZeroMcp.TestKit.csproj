@@ -5,17 +5,29 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>ZeroMcp.TestKit</RootNamespace>
-    <Description>Universal testing toolkit for MCP servers — .NET fluent DSL</Description>
-    <Authors>ZeroMcp</Authors>
+
+    <!-- NuGet package metadata -->
     <PackageId>ZeroMcp.TestKit</PackageId>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
     <Version>0.1.0</Version>
-    <PackageReadmeFile>../../README.md</PackageReadmeFile>
-    <PackageTags>mcp;model-context-protocol;aspnetcore;openapi;brownfield;api;llm;http</PackageTags>
-    <PackageProjectUrl>https://github.com/ZeroMcp/ZeroMcp.TeskKitEngine</PackageProjectUrl>
+    <Authors>ZeroMcp</Authors>
+    <Company>ZeroMcp</Company>
+    <Copyright>Copyright © ZeroMcp Contributors</Copyright>
+    <Description>Universal testing toolkit for MCP (Model Context Protocol) servers. Provides a fluent .NET DSL for defining tool expectations — schema validation, determinism, error paths, streaming — and runs them via the bundled mcptest engine.</Description>
+    <PackageTags>mcp;model-context-protocol;testing;test;xunit;api;llm;ai;openai;claude;schema-validation;json-rpc</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>NUGET_README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Initial preview release — fluent DSL, engine resolver, native asset bundling.</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="NUGET_README.md" Pack="true" PackagePath="\" />
+    <None Include="icon.png" Pack="true" PackagePath="\" Condition="Exists('icon.png')" />
+  </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <Content Include="runtimes/**/*" PackagePath="runtimes" CopyToOutputDirectory="PreserveNewest" />

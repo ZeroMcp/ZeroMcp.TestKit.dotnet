@@ -70,3 +70,23 @@
 
 - Replaced dead `dawidd6/action-download-release-asset@v3` action with `gh release download` (built-in CLI, no third-party dependency).
 - Fixed repo name typo: `ZeroMcp.TeskKitEngine` → `ZeroMcp.TestKitEngine`.
+
+### Set up csproj files for NuGet.org publishing
+
+- **Updated `ZeroMcp.TestKit.csproj`** with full NuGet metadata:
+  - `Company`, `Copyright`, `RepositoryType`, `PackageRequireLicenseAcceptance`, `PackageReleaseNotes`
+  - Removed duplicate `RepositoryUrl`; unified `PackageProjectUrl` to the dotnet repo
+  - `PackageIcon` (conditional on file existence) for NuGet gallery branding
+  - `PackageReadmeFile` now points to a dedicated `NUGET_README.md` packed into the nupkg root
+  - Expanded `PackageTags` for better discoverability (mcp, testing, xunit, ai, llm, schema-validation, json-rpc)
+
+- **Updated `ZeroMcp.TestKit.Xunit.csproj`** with matching metadata:
+  - Same property set as the core package
+  - `PackageReadmeFile` points to its own `NUGET_README.md`
+  - Tags tuned for xUnit/assertion-specific discovery
+
+- **Created `src/ZeroMcp.TestKit/NUGET_README.md`** — standalone README shown on the NuGet.org package page for the core DSL package. Covers install, quick start, API table, response inspection, engine resolution, and links.
+
+- **Created `src/ZeroMcp.TestKit.Xunit/NUGET_README.md`** — standalone README for the xUnit integration package. Covers attributes, McpAssert helpers, fluent chains, and a method reference table.
+
+- **All 33 unit tests passing.**

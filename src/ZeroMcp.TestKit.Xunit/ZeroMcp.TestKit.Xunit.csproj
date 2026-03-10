@@ -5,17 +5,30 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>ZeroMcp.TestKit.Xunit</RootNamespace>
-    <Description>xUnit integration for ZeroMcp.TestKit — [McpFact] and [McpTheory] attributes</Description>
-    <Authors>ZeroMcp</Authors>
-    <PackageId>ZeroMcp.TestKit.Xunit</PackageId>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
-    <Version>0.1.0</Version>
     <IsTestProject>false</IsTestProject>
-    <PackageReadmeFile>../../README.md</PackageReadmeFile>
-    <PackageProjectUrl>https://github.com/ZeroMcp/ZeroMcp.TeskKit</PackageProjectUrl>
+
+    <!-- NuGet package metadata -->
+    <PackageId>ZeroMcp.TestKit.Xunit</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>ZeroMcp</Authors>
+    <Company>ZeroMcp</Company>
+    <Copyright>Copyright © ZeroMcp Contributors</Copyright>
+    <Description>xUnit integration for ZeroMcp.TestKit — adds [McpFact] and [McpTheory] attributes, McpAssert static helpers, and fluent assertion chains for testing MCP servers in Visual Studio Test Explorer.</Description>
+    <PackageTags>mcp;model-context-protocol;testing;test;xunit;assertions;fluent;ai;llm;schema-validation</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ZeroMcp/ZeroMcp.TestKit.dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>NUGET_README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Initial preview release — McpFact, McpTheory, McpAssert, and fluent assertion extensions.</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="NUGET_README.md" Pack="true" PackagePath="\" />
+    <None Include="icon.png" Pack="true" PackagePath="\" Condition="Exists('icon.png')" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ZeroMcp.TestKit\ZeroMcp.TestKit.csproj" />
